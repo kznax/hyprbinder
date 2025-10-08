@@ -36,24 +36,7 @@ func main() {
 	switch Menu() {
 	case 0:
 		Clear()
-		log.Fatal("O")
-		}
-
-func CheckingExist() {
-			var _, FileError = os.Stat(homePath + appFile)
-			if os.IsNotExist(FileError) == true {
-				fmt.Println("Whare is your bind config? Default is ~/.config/hypr/hyprland.conf")
-				fmt.Scanln(&user.Path)
-				_, err := os.Stat(user.Path)
-				if err != nil {
-					if os.IsNotExist(err) {
-						log.Fatal("File doesn't exist  \n")
-					}
-				}
-				fmt.Printf("Exist \n")
-			}
-}
-h no you closed the programm")
+		log.Fatal("Oh no you closed the programm")
 	case 1:
 		Clear()
 		Q_and_A()
@@ -145,6 +128,6 @@ func Clear() {
 	cmd.Run()
 }
 
-func Parse(str string,bind *Bind) error{
+func Parse(str string, bind *Bind) error {
 
 }
