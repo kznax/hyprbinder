@@ -1,5 +1,9 @@
 package main
 
+//TO DO LIST:
+// write the parser
+// write the func that will write binds into the file
+// thats enough
 import (
 	"encoding/json"
 	"fmt"
