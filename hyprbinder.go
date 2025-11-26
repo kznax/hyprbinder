@@ -1,9 +1,5 @@
 package main
 
-//TO DO LIST:
-// write the parser
-// write the func that will write binds into the file
-// thats enough
 import (
 	"encoding/json"
 	"fmt"
@@ -46,10 +42,35 @@ func main() {
 		Q_and_A()
 	case 2:
 		Clear()
-		fmt.Println("developing weight")
+		ChangingBindsFile()
 	}
 }
+func ChangingBindsFile() {
+	fmt.Println("Where is your bind config? Default is ~/.config/hypr/hyprland.conf")
+	fmt.Scanln(&user.Path)
+	_, err := os.Stat(user.Path)
+	if err != nil {
+		if os.IsNotExist(err) {
+			log.Fatal("File doesn't exist  \n")
+		}
+	}
+	fmt.Printf("Exist \n")
+	//the loadcfg part
+	jsn, err := json.Marshal(user)
+	if err != nil {
+		fmt.Println("error:", err)
+	}
+	_, error := os.Stat(homePath + appDir)
 
+	if os.IsNotExist(error) == true {
+		fmt.Printf("Creating directory for hyprbinder")
+		os.Mkdir(homePath+appDir, 0777)
+	}
+	os.Create(homePath + appFile)
+	os.WriteFile(homePath+appFile, jsn, 0666)
+	cfg := ReadFile(homePath + appFile)
+	json.Unmarshal(cfg, &user)
+}
 func CheckingExist() {
 	var _, FileError = os.Stat(homePath + appFile)
 	if os.IsNotExist(FileError) == true {
@@ -131,7 +152,6 @@ func Clear() {
 	cmd.Stdout = os.Stdout
 	cmd.Run()
 }
-
-func Parse(str string, bind *Bind) error {
+func Lecser() {
 
 }
