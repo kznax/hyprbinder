@@ -6,6 +6,7 @@ import (
 	"log"
 	"os"
 	"os/exec"
+	"strings"
 )
 
 // globals
@@ -43,6 +44,9 @@ func main() {
 	case 2:
 		Clear()
 		ChangingBindsFile()
+	case 3:
+		Clear()
+		Binding()
 	}
 }
 func ChangingBindsFile() {
@@ -71,6 +75,7 @@ func ChangingBindsFile() {
 	cfg := ReadFile(homePath + appFile)
 	json.Unmarshal(cfg, &user)
 }
+
 func CheckingExist() {
 	var _, FileError = os.Stat(homePath + appFile)
 	if os.IsNotExist(FileError) == true {
@@ -112,9 +117,10 @@ func Menu() uint8 {
 	var q uint8
 	Clear()
 	fmt.Println("***Menu***")
+	fmt.Println("0:Exit")
 	fmt.Println("1:Bind")
 	fmt.Println("2:Change bind")
-	fmt.Println("0:Exit")
+	fmt.Println("3:Test fuctions")
 	fmt.Scanln(&q)
 	return q
 }
@@ -152,6 +158,13 @@ func Clear() {
 	cmd.Stdout = os.Stdout
 	cmd.Run()
 }
+
+func Binding() {
+	f, _ := os.ReadFile(homePath + appFile)
+	s := strings.Split(string(f), "Path")
+	fmt.Print(s)
+}
+
 func Lecser() {
 
 }
