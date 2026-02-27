@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"io"
 	"log"
 	"os"
 	"os/exec"
@@ -160,9 +161,18 @@ func Clear() {
 }
 
 func Binding() {
+	type Message struct {
+		Path string
+	}
+	var m Message
 	f, _ := os.ReadFile(homePath + appFile)
-	s := strings.Split(string(f), "Path")
-	fmt.Print(s)
+	dec := json.NewDecoder(strings.NewReader(string(f)))
+	if err := dec.Decode(&m); err == io.EOF {
+	} else if err != nil {
+		log.Fatal(err)
+	}
+
+	fmt.Printf(m.Path)
 }
 
 func Lecser() {
