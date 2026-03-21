@@ -1,5 +1,4 @@
 package main
-
 import (
 	"encoding/json"
 	"fmt"
@@ -164,6 +163,7 @@ func Binding() {
 	type Message struct {
 		Path string
 	}
+	var udefbind Bind
 	var m Message
 	f, _ := os.ReadFile(homePath + appFile)
 	dec := json.NewDecoder(strings.NewReader(string(f)))
@@ -172,9 +172,34 @@ func Binding() {
 		log.Fatal(err)
 	}
 
-	fmt.Printf(m.Path)
+	// so i think here should be a parser
+	Clear()
+	fmt.Println("What's the first button? ")
+	fmt.Scanln(&udefbind.bind1)
+	//
+	Clear()
+	fmt.Println("What's the second button? ")
+	fmt.Scanln(&udefbind.bind2)
+	//
+	Clear()
+	fmt.Println("command ")
+	fmt.Scanln(&udefbind.cmd)
+	//
+	Clear()
+	fmt.Println("programm ")
+	fmt.Scanln(&udefbind.prog)
+	l, _ := os.ReadFile(m.Path)
+	// the parsing algorithm
+	// so basicly check the logic chapter in README.md
+	d := strings.Split(string(l), " ")
+	for _, val := range d{
+		fmt.Printf(val,"\n")
+		if val == "bind=",udefbind.bind1,",",udefbind.bind2,",",udefbind.cmd,",",udefbind.prog{
+			fmt.Printf("That bind is already in use")
+		}
+		else {
+			err := os.WriteFile(homePath + appFile, []byte("\nbind = ",udefbind.bind1,", ",udefbind.bind2,", ",udefbind.cmd,", ",udefbind.prog),666)
+		}
+	} 
 }
 
-func Lecser() {
-
-}
