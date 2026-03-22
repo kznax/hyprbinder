@@ -7,6 +7,7 @@ import (
 	"os"
 	"os/exec"
 	"strings"
+	"time"
 )
 
 // globals
@@ -34,19 +35,21 @@ type Bind struct {
 func main() {
 	CheckingExist()
 	LoadCfg()
-	switch Menu() {
-	case 0:
-		Clear()
-		log.Fatal("Oh no you closed the programm")
-	case 1:
-		Clear()
-		Q_and_A()
-	case 2:
-		Clear()
-		ChangingBindsFile()
-	case 3:
-		Clear()
-		Binding()
+	for 1 != 0{
+		switch Menu() {
+		case 0:
+			Clear()
+			log.Fatal("Oh no you closed the programm")
+		case 1:
+			Clear()
+			Binding()
+		case 2:
+			Clear()
+			ChangingBindsFile()
+		case 3:
+			Clear()
+			Help()
+		}
 	}
 }
 func ChangingBindsFile() {
@@ -119,30 +122,10 @@ func Menu() uint8 {
 	fmt.Println("***Menu***")
 	fmt.Println("0:Exit")
 	fmt.Println("1:Bind")
-	fmt.Println("2:Change bind")
-	fmt.Println("3:Test fuctions")
+	fmt.Println("2:Change bind file")
+	fmt.Println("3:Help")
 	fmt.Scanln(&q)
 	return q
-}
-
-func Q_and_A() Bind {
-	var udefbind Bind
-	Clear()
-	fmt.Println("What's the first button? ")
-	fmt.Scanln(&udefbind.bind1)
-	//
-	Clear()
-	fmt.Println("What's the second button? ")
-	fmt.Scanln(&udefbind.bind2)
-	//
-	Clear()
-	fmt.Println("command ")
-	fmt.Scanln(&udefbind.cmd)
-	//
-	Clear()
-	fmt.Println("programm ")
-	fmt.Scanln(&udefbind.prog)
-	return udefbind
 }
 
 func ReadFile(pth string) []byte {
@@ -189,17 +172,31 @@ func Binding() {
 	fmt.Println("programm ")
 	fmt.Scanln(&udefbind.prog)
 	l, _ := os.ReadFile(m.Path)
+	fmt.Printf(string(l))
 	// the parsing algorithm
 	// so basicly check the logic chapter in README.md
 	d := strings.Split(string(l), " ")
+	expected := fmt.Sprintf("bind=%s,%s,%s,%s", udefbind.bind1, udefbind.bind2, udefbind.cmd, udefbind.prog)
+	c := 0
 	for _, val := range d{
-		fmt.Printf(val,"\n")
-		if val == "bind=",udefbind.bind1,",",udefbind.bind2,",",udefbind.cmd,",",udefbind.prog{
+		if val == expected{
 			fmt.Printf("That bind is already in use")
-		}
-		else {
-			err := os.WriteFile(homePath + appFile, []byte("\nbind = ",udefbind.bind1,", ",udefbind.bind2,", ",udefbind.cmd,", ",udefbind.prog),666)
+		} else if c == 0{
+			f, err := os.OpenFile(m.Path, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0666)
+			bind := fmt.Sprintf("\nbind = %s, %s, %s, %s", udefbind.bind1, udefbind.bind2, udefbind.cmd, udefbind.prog)
+			defer f.Close()
+
+			if _, err := f.WriteString(bind); err != nil{
+				fmt.Println(err)
+			}
+			if err != nil {
+				fmt.Printf("Error writing file: %v\n", err)
+			}
+			c = 1 + c
 		}
 	} 
 }
-
+func Help(){
+fmt.Printf("RTFM - https://wiki.hypr.land/Configuring/Binds/ - 1st and 2nd button,\n https://wiki.hypr.land/Configuring/Dispatchers/#list-of-dispatchers 3rd button\n 4th the programm that u want to execute or do smthing with it\n")
+time.Sleep(15 * time.Second)
+}
