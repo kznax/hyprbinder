@@ -14,6 +14,4 @@ If no match is found, it opens the file in append mode and writes the new bind.
 If a match exists, it warns the user.
 
 ## Installation 
-Copy the repo, then ```bash
-cp hyprbinder /bin/
-``` 
+Copy the repo, then ```cp hyprbinder /bin/``` 
